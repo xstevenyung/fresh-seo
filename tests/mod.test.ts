@@ -1,6 +1,6 @@
 // import type { Manifest } from "fresh/server.ts";
 import { createSitemap } from "../mod.ts";
-import { assertStringIncludes, FakeTime } from "./deps.ts";
+import { assert, assertStringIncludes, FakeTime } from "./deps.ts";
 
 Deno.env.set("APP_URL", "https://deno.land");
 
@@ -73,4 +73,24 @@ Deno.test("Map static route file", () => {
   } finally {
     time.restore();
   }
+});
+
+Deno.test("Ignore 404 route file", () => {
+  const manifest = {
+    routes: {
+      "./routes/_404.tsx": { default: () => null },
+    },
+  };
+
+  const sitemap = createSitemap(manifest);
+
+  assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(
+    sitemap,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+  );
+
+  assert(!sitemap.includes(`<loc>https://deno.land/_404</loc>`));
+
+  assertStringIncludes(sitemap, "</urlset>");
 });
