@@ -1,6 +1,19 @@
-import { day, extname, dirname, basename } from "./deps.ts";
+import { ensureFile, day, extname, dirname, basename, join } from "./deps.ts";
 
-export function createSitemap(manifest: any) {
+export const DEFAULT_OPTIONS = {
+  staticDir: "./static",
+};
+
+export async function createSitemap(manifest: any, options = DEFAULT_OPTIONS) {
+  const outPath = join(options.staticDir, "sitemap.xml");
+  const sitemap = generateSitemap(manifest);
+
+  await ensureFile(outPath);
+
+  return Deno.writeTextFile(outPath, sitemap);
+}
+
+export function generateSitemap(manifest: any): string {
   const baseURL = Deno.env.get("APP_URL");
 
   if (!baseURL) {

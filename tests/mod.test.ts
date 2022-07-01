@@ -1,6 +1,6 @@
 // import type { Manifest } from "fresh/server.ts";
-import { createSitemap } from "../mod.ts";
-import { assert, assertStringIncludes, FakeTime } from "./deps.ts";
+import { generateSitemap, createSitemap } from "../mod.ts";
+import { assert, assertStringIncludes, FakeTime, join } from "./deps.ts";
 
 Deno.env.set("APP_URL", "https://deno.land");
 
@@ -9,7 +9,7 @@ Deno.test("Empty sitemap", () => {
     routes: {},
   };
 
-  const sitemap = createSitemap(manifest);
+  const sitemap = generateSitemap(manifest);
 
   assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
@@ -27,7 +27,7 @@ Deno.test("Map root index.ts", () => {
     },
   };
 
-  const sitemap = createSitemap(manifest);
+  const sitemap = generateSitemap(manifest);
 
   try {
     assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
@@ -55,7 +55,7 @@ Deno.test("Map static route file", () => {
     },
   };
 
-  const sitemap = createSitemap(manifest);
+  const sitemap = generateSitemap(manifest);
 
   try {
     assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
@@ -82,7 +82,7 @@ Deno.test("Ignore 404 route file", () => {
     },
   };
 
-  const sitemap = createSitemap(manifest);
+  const sitemap = generateSitemap(manifest);
 
   assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
@@ -93,4 +93,30 @@ Deno.test("Ignore 404 route file", () => {
   assert(!sitemap.includes(`<loc>https://deno.land/_404</loc>`));
 
   assertStringIncludes(sitemap, "</urlset>");
+});
+
+Deno.test("Create static/sitemap.xml file", async () => {
+  try {
+    await Deno.lstat("./tests/tmp/static/sitemap.xml");
+    await Deno.remove("./tests/tmp", { recursive: true });
+  } catch (e) {
+    //
+  }
+
+  const manifest = {
+    routes: {
+      "./routes/dashboard.tsx": { default: () => null },
+    },
+  };
+
+  try {
+    await createSitemap(manifest, {
+      staticDir: "./tests/tmp/static",
+    });
+
+    const stat = await Deno.lstat("./tests/tmp/static/sitemap.xml");
+    assert(stat.isFile);
+  } finally {
+    await Deno.remove("./tests/tmp", { recursive: true });
+  }
 });
