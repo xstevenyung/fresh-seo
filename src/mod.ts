@@ -6,11 +6,17 @@ export const DEFAULT_OPTIONS = {
 
 export async function createSitemap(manifest: any, options = DEFAULT_OPTIONS) {
   const outPath = join(options.staticDir, "sitemap.xml");
-  const sitemap = generateSitemap(manifest);
 
-  await ensureFile(outPath);
+  try {
+    const sitemap = generateSitemap(manifest);
 
-  return Deno.writeTextFile(outPath, sitemap);
+    await ensureFile(outPath);
+
+    return Deno.writeTextFile(outPath, sitemap);
+  } catch (e) {
+    console.warn(e.message);
+    return null;
+  }
 }
 
 export function generateSitemap(manifest: any): string {
