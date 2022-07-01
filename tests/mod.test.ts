@@ -1,6 +1,5 @@
-// import type { Manifest } from "fresh/server.ts";
 import { generateSitemap, createSitemap } from "../mod.ts";
-import { assert, assertStringIncludes, FakeTime, join } from "./deps.ts";
+import { assert, assertStringIncludes, FakeTime } from "./deps.ts";
 
 Deno.env.set("APP_URL", "https://deno.land");
 
