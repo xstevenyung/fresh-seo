@@ -55,7 +55,8 @@ export function generateSitemap(manifest: any): string {
           <changefreq>daily</changefreq>
           <priority>0.8</priority>
         </url>`;
-        })}
+        })
+        .join("\n")}
     </urlset>
   `;
 }
