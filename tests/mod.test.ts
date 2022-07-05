@@ -1,4 +1,4 @@
-import { createSitemap, generateSitemap } from "../mod.ts";
+import { Sitemap } from "../mod.ts";
 import { assert, assertStringIncludes, FakeTime } from "./deps.ts";
 
 const url = "https://deno.land";
@@ -8,15 +8,16 @@ Deno.test("Empty sitemap", () => {
   const manifest = {
     routes: {},
   };
+  const sitemap = new Sitemap(url, manifest);
 
-  const sitemap = generateSitemap(url, manifest);
+  const result = sitemap.generate();
 
-  assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
-    sitemap,
+    result,
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
-  assertStringIncludes(sitemap, "</urlset>");
+  assertStringIncludes(result, "</urlset>");
 });
 
 Deno.test("Map root index.ts", () => {
@@ -26,22 +27,23 @@ Deno.test("Map root index.ts", () => {
       "./routes/index.tsx": { default: () => null },
     },
   };
+  const sitemap = new Sitemap(url, manifest);
 
-  const sitemap = generateSitemap(url, manifest);
+  const result = sitemap.generate();
 
   try {
-    assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
+    assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
     assertStringIncludes(
-      sitemap,
+      result,
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     );
 
-    assertStringIncludes(sitemap, `<loc>https://deno.land/</loc>`);
-    assertStringIncludes(sitemap, `<lastmod>2022-07-01</lastmod>`);
-    assertStringIncludes(sitemap, `<changefreq>daily</changefreq>`);
-    assertStringIncludes(sitemap, `<priority>0.8</priority>`);
+    assertStringIncludes(result, `<loc>https://deno.land/</loc>`);
+    assertStringIncludes(result, `<lastmod>2022-07-01</lastmod>`);
+    assertStringIncludes(result, `<changefreq>daily</changefreq>`);
+    assertStringIncludes(result, `<priority>0.8</priority>`);
 
-    assertStringIncludes(sitemap, "</urlset>");
+    assertStringIncludes(result, "</urlset>");
   } finally {
     time.restore();
   }
@@ -54,22 +56,23 @@ Deno.test("Map static route file", () => {
       "./routes/dashboard.tsx": { default: () => null },
     },
   };
+  const sitemap = new Sitemap(url, manifest);
 
-  const sitemap = generateSitemap(url, manifest);
+  const result = sitemap.generate();
 
   try {
-    assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
+    assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
     assertStringIncludes(
-      sitemap,
+      result,
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     );
 
-    assertStringIncludes(sitemap, `<loc>https://deno.land/dashboard</loc>`);
-    assertStringIncludes(sitemap, `<lastmod>2022-07-01</lastmod>`);
-    assertStringIncludes(sitemap, `<changefreq>daily</changefreq>`);
-    assertStringIncludes(sitemap, `<priority>0.8</priority>`);
+    assertStringIncludes(result, `<loc>https://deno.land/dashboard</loc>`);
+    assertStringIncludes(result, `<lastmod>2022-07-01</lastmod>`);
+    assertStringIncludes(result, `<changefreq>daily</changefreq>`);
+    assertStringIncludes(result, `<priority>0.8</priority>`);
 
-    assertStringIncludes(sitemap, "</urlset>");
+    assertStringIncludes(result, "</urlset>");
   } finally {
     time.restore();
   }
@@ -81,18 +84,19 @@ Deno.test("Ignore 404 route file", () => {
       "./routes/_404.tsx": { default: () => null },
     },
   };
+  const sitemap = new Sitemap(url, manifest);
 
-  const sitemap = generateSitemap(url, manifest);
+  const result = sitemap.generate();
 
-  assertStringIncludes(sitemap, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
-    sitemap,
+    result,
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
 
-  assert(!sitemap.includes(`<loc>https://deno.land/_404</loc>`));
+  assert(!result.includes(`<loc>https://deno.land/_404</loc>`));
 
-  assertStringIncludes(sitemap, "</urlset>");
+  assertStringIncludes(result, "</urlset>");
 });
 
 Deno.test("Create static/sitemap.xml file", async () => {
@@ -102,17 +106,15 @@ Deno.test("Create static/sitemap.xml file", async () => {
   } catch (e) {
     //
   }
-
   const manifest = {
     routes: {
       "./routes/dashboard.tsx": { default: () => null },
     },
   };
+  const sitemap = new Sitemap(url, manifest);
 
   try {
-    await createSitemap(manifest, {
-      staticDir: "./tests/tmp/static",
-    });
+    sitemap.save();
 
     const stat = await Deno.lstat("./tests/tmp/static/sitemap.xml");
     assert(stat.isFile);
@@ -134,12 +136,13 @@ Deno.test("Map dynamic routes", () => {
       },
     },
   };
+  const sitemap = new Sitemap(url, manifest);
 
-  const sitemap = generateSitemap(url, manifest);
+  const result = sitemap.generate();
 
-  assert(!sitemap.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
+  assert(!result.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
   assertStringIncludes(
-    sitemap,
+    result,
     "<loc>https://deno.land/blog/my-awesome-blogpost</loc>",
   );
 });
@@ -152,8 +155,9 @@ Deno.test("Ignore dynamic routes if no sitemap function given", () => {
       },
     },
   };
+  const sitemap = new Sitemap(url, manifest);
 
-  const sitemap = generateSitemap(url, manifest);
+  const result = sitemap.generate();
 
-  assert(!sitemap.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
+  assert(!result.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
 });
