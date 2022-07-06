@@ -129,29 +129,29 @@ Deno.test("Ignore special routes file starting with _", () => {
 //   }
 // });
 
-Deno.test("Map dynamic routes", () => {
-  const manifest = {
-    routes: {
-      "./routes/blog/[slug].tsx": {
-        default: () => null,
-        sitemap: () => {
-          return [
-            "my-awesome-blogpost",
-          ];
-        },
-      },
-    },
-  };
-  const sitemap = new SitemapContext(url, manifest);
+// Deno.test("Map dynamic routes", () => {
+//   const manifest = {
+//     routes: {
+//       "./routes/blog/[slug].tsx": {
+//         default: () => null,
+//         sitemap: () => {
+//           return [
+//             "my-awesome-blogpost",
+//           ];
+//         },
+//       },
+//     },
+//   };
+//   const sitemap = new SitemapContext(url, manifest);
 
-  const result = sitemap.generate();
+//   const result = sitemap.generate();
 
-  assert(!result.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
-  assertStringIncludes(
-    result,
-    "<loc>https://deno.land/blog/my-awesome-blogpost</loc>",
-  );
-});
+//   assert(!result.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
+//   assertStringIncludes(
+//     result,
+//     "<loc>https://deno.land/blog/my-awesome-blogpost</loc>",
+//   );
+// });
 
 Deno.test("Ignore dynamic routes if no sitemap function given", () => {
   const manifest = {
@@ -185,6 +185,27 @@ Deno.test("Ignore sitemap.xml route", () => {
   );
 
   assert(!result.includes(`<loc>https://deno.land/sitemap.xml</loc>`));
+
+  assertStringIncludes(result, "</urlset>");
+});
+
+Deno.test("Ignore sitemap.xml route", () => {
+  const manifest = {
+    routes: {
+      "./routes/blog/[slug].tsx": { default: () => null },
+    },
+  };
+  const sitemap = new SitemapContext(url, manifest);
+
+  const result = sitemap.add("/blog/hello-world").generate();
+
+  assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(
+    result,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  );
+
+  assertStringIncludes(result, "<loc>https://deno.land/blog/hello-world</loc>");
 
   assertStringIncludes(result, "</urlset>");
 });
