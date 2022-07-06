@@ -9,11 +9,11 @@ await ensureFile(destination);
 
 const stub = `import { Handlers } from "$fresh/server.ts";
 import manifest from "../fresh.gen.ts";
-import { SitemapContext } from "https://deno.land/x/fresh_seo@0.0.3";
+import { SitemapContext } from "https://deno.land/x/fresh_seo@0.0.4/mod.ts";
 
 export const handler: Handlers = {
   GET(req, ctx) {
-    const sitemap = new Sitemap('http://example.com', manifest);
+    const sitemap = new SitemapContext("http://example.com", manifest);
 
     // You can add additional page here
 
