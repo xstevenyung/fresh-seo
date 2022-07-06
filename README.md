@@ -16,8 +16,8 @@ You should now have a basic `sitemap.xml` available.
 
 ## How does it work?
 
-Fresh SEO automatically map out routes in your Fresh project so you don't have
-to do anything for basic routes.
+Fresh SEO automatically map out **static** routes in your Fresh project so you
+don't have to do anything for basic routes.
 
 But you will still have to map dynamic routes yourself.
 
