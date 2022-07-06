@@ -78,10 +78,13 @@ Deno.test("Map static route file", () => {
   }
 });
 
-Deno.test("Ignore 404 route file", () => {
+Deno.test("Ignore special routes file starting with _", () => {
   const manifest = {
     routes: {
+      "./routes/_middleware.tsx": { default: () => null },
+      "./routes/blog/_middleware.tsx": { default: () => null },
       "./routes/_404.tsx": { default: () => null },
+      "./routes/_500.tsx": { default: () => null },
     },
   };
   const sitemap = new SitemapContext(url, manifest);
@@ -95,6 +98,9 @@ Deno.test("Ignore 404 route file", () => {
   );
 
   assert(!result.includes(`<loc>https://deno.land/_404</loc>`));
+  assert(!result.includes(`<loc>https://deno.land/_middleware</loc>`));
+  assert(!result.includes(`<loc>https://deno.land/blog/_middleware</loc>`));
+  assert(!result.includes(`<loc>https://deno.land/_500</loc>`));
 
   assertStringIncludes(result, "</urlset>");
 });
@@ -160,4 +166,25 @@ Deno.test("Ignore dynamic routes if no sitemap function given", () => {
   const result = sitemap.generate();
 
   assert(!result.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
+});
+
+Deno.test("Ignore sitemap.xml route", () => {
+  const manifest = {
+    routes: {
+      "./routes/sitemap.xml.ts": { default: () => null },
+    },
+  };
+  const sitemap = new SitemapContext(url, manifest);
+
+  const result = sitemap.generate();
+
+  assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(
+    result,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  );
+
+  assert(!result.includes(`<loc>https://deno.land/sitemap.xml</loc>`));
+
+  assertStringIncludes(result, "</urlset>");
 });

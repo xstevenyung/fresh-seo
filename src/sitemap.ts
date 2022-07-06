@@ -3,6 +3,7 @@ import { basename, day, dirname, extname } from "./deps.ts";
 export class SitemapContext {
   #url: string;
   #manifest: any;
+  #globalIgnore = ["sitemap.xml"];
 
   constructor(url: string, manifest: any) {
     this.#url = url;
@@ -19,7 +20,9 @@ export class SitemapContext {
           const file = basename(path);
           const fileName = file.replace(extname(file), "");
 
-          if (isRootRoute && fileName === "_404") {
+          if (
+            fileName.startsWith("_") || this.#globalIgnore.includes(fileName)
+          ) {
             return false;
           }
 
