@@ -12,7 +12,8 @@ deno run --allow-read --allow-write https://deno.land/x/fresh_seo/init.ts
 
 You should now have a new file `./routes/sitemap.xml.ts`;
 
-You should now have a basic `sitemap.xml` available.
+You should now have a basic `sitemap.xml` available at
+`http://localhost:8000/sitemap.xml`.
 
 ## How does it work?
 
