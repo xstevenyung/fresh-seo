@@ -1,13 +1,19 @@
+/// <reference no-default-lib="true" />
+/// <reference lib="dom" />
+/// <reference lib="dom.asynciterable" />
+/// <reference lib="deno.ns" />
+/// <reference lib="deno.unstable" />
 import day from "dayjs";
-import { basename, dirname, extname } from "path";
+import { basename, extname } from "path";
+import { Manifest } from "fresh/server.ts";
 
 export class SitemapContext {
   #url: string;
-  #manifest: any;
+  #manifest: Manifest;
   #globalIgnore = ["sitemap.xml"];
   #additionalRoutes: Array<string> = [];
 
-  constructor(url: string, manifest: any) {
+  constructor(url: string, manifest: Manifest) {
     this.#url = url;
     this.#manifest = manifest;
   }
@@ -16,7 +22,7 @@ export class SitemapContext {
     return [
       ...Object.entries(this.#manifest.routes)
         .filter(([path]) => {
-          const isRootRoute = "./routes" === dirname(path);
+          // const isRootRoute = "./routes" === dirname(path);
           const file = basename(path);
           const fileName = file.replace(extname(file), "");
           const isDynamic = !!fileName.match(/^\[.+\]$/)?.length;

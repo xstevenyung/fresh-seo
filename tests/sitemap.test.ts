@@ -1,14 +1,18 @@
 import { SitemapContext } from "../mod.ts";
 import { assert, assertStringIncludes } from "testing/asserts.ts";
 import { FakeTime } from "testing/time.ts";
+import { Manifest } from "fresh/server.ts";
 
 const url = "https://deno.land";
 Deno.env.set("APP_URL", url);
 
 Deno.test("Empty sitemap", () => {
-  const manifest = {
+  const manifest: Manifest = {
     routes: {},
+    islands: {},
+    baseUrl: url,
   };
+
   const sitemap = new SitemapContext(url, manifest);
 
   const result = sitemap.generate();
@@ -23,10 +27,12 @@ Deno.test("Empty sitemap", () => {
 
 Deno.test("Map root index.ts", () => {
   const time = new FakeTime(new Date("2022-07-01"));
-  const manifest = {
+  const manifest: Manifest = {
     routes: {
       "./routes/index.tsx": { default: () => null },
     },
+    islands: {},
+    baseUrl: url,
   };
   const sitemap = new SitemapContext(url, manifest);
 
@@ -52,12 +58,13 @@ Deno.test("Map root index.ts", () => {
 
 Deno.test("Map static route file", () => {
   const time = new FakeTime(new Date("2022-07-01"));
-  const manifest = {
+  const sitemap = new SitemapContext(url, {
     routes: {
       "./routes/dashboard.tsx": { default: () => null },
     },
-  };
-  const sitemap = new SitemapContext(url, manifest);
+    islands: {},
+    baseUrl: url,
+  });
 
   const result = sitemap.generate();
 
@@ -80,13 +87,15 @@ Deno.test("Map static route file", () => {
 });
 
 Deno.test("Ignore special routes file starting with _", () => {
-  const manifest = {
+  const manifest: Manifest = {
     routes: {
       "./routes/_middleware.tsx": { default: () => null },
       "./routes/blog/_middleware.tsx": { default: () => null },
       "./routes/_404.tsx": { default: () => null },
       "./routes/_500.tsx": { default: () => null },
     },
+    islands: {},
+    baseUrl: url,
   };
   const sitemap = new SitemapContext(url, manifest);
 
@@ -106,61 +115,15 @@ Deno.test("Ignore special routes file starting with _", () => {
   assertStringIncludes(result, "</urlset>");
 });
 
-// Deno.test("Create static/sitemap.xml file", async () => {
-//   try {
-//     await Deno.lstat("./tests/tmp/static/sitemap.xml");
-//     await Deno.remove("./tests/tmp", { recursive: true });
-//   } catch (e) {
-//     //
-//   }
-//   const manifest = {
-//     routes: {
-//       "./routes/dashboard.tsx": { default: () => null },
-//     },
-//   };
-//   const sitemap = new SitemapContext(url, manifest);
-
-//   try {
-//     sitemap.save();
-
-//     const stat = await Deno.lstat("./tests/tmp/static/sitemap.xml");
-//     assert(stat.isFile);
-//   } finally {
-//     await Deno.remove("./tests/tmp", { recursive: true });
-//   }
-// });
-
-// Deno.test("Map dynamic routes", () => {
-//   const manifest = {
-//     routes: {
-//       "./routes/blog/[slug].tsx": {
-//         default: () => null,
-//         sitemap: () => {
-//           return [
-//             "my-awesome-blogpost",
-//           ];
-//         },
-//       },
-//     },
-//   };
-//   const sitemap = new SitemapContext(url, manifest);
-
-//   const result = sitemap.generate();
-
-//   assert(!result.includes(`<loc>https://deno.land/blog/[slug]</loc>`));
-//   assertStringIncludes(
-//     result,
-//     "<loc>https://deno.land/blog/my-awesome-blogpost</loc>",
-//   );
-// });
-
 Deno.test("Ignore dynamic routes if no sitemap function given", () => {
-  const manifest = {
+  const manifest: Manifest = {
     routes: {
       "./routes/blog/[slug].tsx": {
         default: () => null,
       },
     },
+    islands: {},
+    baseUrl: url,
   };
   const sitemap = new SitemapContext(url, manifest);
 
@@ -170,10 +133,12 @@ Deno.test("Ignore dynamic routes if no sitemap function given", () => {
 });
 
 Deno.test("Ignore sitemap.xml route", () => {
-  const manifest = {
+  const manifest: Manifest = {
     routes: {
       "./routes/sitemap.xml.ts": { default: () => null },
     },
+    islands: {},
+    baseUrl: url,
   };
   const sitemap = new SitemapContext(url, manifest);
 
@@ -191,10 +156,12 @@ Deno.test("Ignore sitemap.xml route", () => {
 });
 
 Deno.test("Ignore sitemap.xml route", () => {
-  const manifest = {
+  const manifest: Manifest = {
     routes: {
       "./routes/blog/[slug].tsx": { default: () => null },
     },
+    islands: {},
+    baseUrl: url,
   };
   const sitemap = new SitemapContext(url, manifest);
 
