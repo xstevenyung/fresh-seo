@@ -1,3 +1,8 @@
 {
-  "imports": {}
+  "imports": {
+    "dayjs": "https://esm.sh/dayjs@1.11.3",
+    "path": "https://deno.land/std@0.146.0/path/mod.ts",
+    "fs": "https://deno.land/std/fs/mod.ts",
+    "testing/": "https://deno.land/std@0.145.0/testing/"
+  }
 }

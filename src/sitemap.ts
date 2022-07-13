@@ -1,4 +1,5 @@
-import { basename, day, dirname, extname } from "./deps.ts";
+import day from "dayjs";
+import { basename, dirname, extname } from "path";
 
 export class SitemapContext {
   #url: string;
@@ -83,9 +84,3 @@ export class SitemapContext {
   //   }
   // }
 }
-
-// const handler: Handlers = {
-//   GET(req, ctx) {
-//     return new Response();
-//   },
-// };

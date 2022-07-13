@@ -1,5 +1,6 @@
 import { SitemapContext } from "../mod.ts";
-import { assert, assertStringIncludes, FakeTime } from "./deps.ts";
+import { assert, assertStringIncludes } from "testing/asserts.ts";
+import { FakeTime } from "testing/time.ts";
 
 const url = "https://deno.land";
 Deno.env.set("APP_URL", url);
