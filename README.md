@@ -1,27 +1,27 @@
 # Fresh SEO 🍋
 
-The fastest way ⚡️ to create sitemap in your Deno
+The fastest way ⚡️ to create sitemaps in your Deno
 [Fresh project](https://fresh.deno.dev/) project 🍋
 
 ## Getting started
 
-To get started, run the init command at the root of your project
+To get started, run the init command at the root of your project.
 
 ```bash
 deno run --allow-read --allow-write https://deno.land/x/fresh_seo/init.ts
 ```
 
-You should now have a new file `./routes/sitemap.xml.ts`;
+A new file `./routes/sitemap.xml.ts` should have been created.
 
-You should now have a basic `sitemap.xml` available at
+A basic `sitemap.xml` should be available at
 `http://localhost:8000/sitemap.xml`.
 
 ## How does it work?
 
-Fresh SEO automatically map out **static** routes in your Fresh project so you
-don't have to do anything for basic routes.
+Fresh SEO automatically maps out **static** routes in your Fresh project. For basic routes, 
+you do not have to do anything manually.
 
-But you will still have to map dynamic routes yourself.
+However, you will still have to map dynamic routes yourself!
 
 ```diff
 // ./routes/sitemap.xml.ts
