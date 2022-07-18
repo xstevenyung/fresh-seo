@@ -1,7 +1,7 @@
 # Fresh SEO 🍋
 
 The fastest way ⚡️ to create sitemap in your Deno
-[Fresh project](https://fresh.deno.dev/) project 🍋 Create Sitemap for your next.
+[Fresh project](https://fresh.deno.dev/) project 🍋
 
 ## Getting started
 
