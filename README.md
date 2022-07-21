@@ -1,4 +1,4 @@
-<img src="https://banners.deno.dev/Fresh?description=The%20next-gen%20web%20framework.&url=https://fresh.deno.dev" />
+<img src="https://banners.deno.dev/Fresh?description=The%20next-gen%20web%20framework!&url=https://fresh.deno.dev" />
 
 The fastest way ⚡️ to create sitemap in your Deno
 [Fresh project](https://fresh.deno.dev/) project 🍋
