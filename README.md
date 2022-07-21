@@ -1,3 +1,5 @@
+<img src="https://dicons.deno.dev/fresh-seo" />
+
 # Fresh SEO 🍋
 
 The fastest way ⚡️ to create sitemap in your Deno
