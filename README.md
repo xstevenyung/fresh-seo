@@ -1,4 +1,4 @@
-<img src="https://dicons.deno.dev/fresh-seo" />
+<img src="https://dicons.deno.dev/fresh-seo-test" />
 
 The fastest way ⚡️ to create sitemap in your Deno
 [Fresh project](https://fresh.deno.dev/) project 🍋
