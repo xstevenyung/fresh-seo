@@ -34,11 +34,9 @@ A basic sitemap should now be available at:
 
 ## How does it work?
 
-**Fresh SEO 🍋** automatically maps <br>
-out **static** routes in your project.
+**Fresh SEO 🍋** automatically maps out **static** routes in your project.
 
-*For basic routes, you do not* <br>
-*have to do anything manually.*
+*For basic routes, you do not have to do anything manually.*
 
 <br>
 
@@ -46,7 +44,7 @@ out **static** routes in your project.
 
 *You will still have to map dynamic routes yourself!*
 
-```js
+```ts
 // ./routes/sitemap.xml.ts
 import { SitemapContext } from 'https://deno.land/x/fresh_seo/mod.ts';
 import { Handlers } from '$fresh/server.ts';
@@ -60,14 +58,9 @@ export const handler : Handlers = {
             'http://example.com'
             manifest
         );
-```
 
-```js
         // You can add additional page here
         sitemap.add('/blog/hello-world');
-```
-
-```js
         return sitemap.render();
     }
 }
