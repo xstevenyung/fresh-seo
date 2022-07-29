@@ -1,5 +1,5 @@
 
-# Fresh SEO 🍋
+# Fresh SEO 🍋   [![Badge License]][License]
 
 *The fastest way to create sitemaps* <br>
 *for your Deno **[Fresh project]**.*
@@ -91,3 +91,10 @@ deno task test
 
 [Fresh project]: https://fresh.deno.dev/
 [Localhost]: http://localhost:8000/sitemap.xml
+
+[License]: LICENSE
+
+
+<!----------------------------------[ Badges ]--------------------------------->
+
+[Badge License]: https://img.shields.io/badge/License-MIT-ac8b11.svg?style=for-the-badge&labelColor=yellow
