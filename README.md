@@ -1,8 +1,7 @@
 
 # Fresh SEO 🍋   [![Badge License]][License]
 
-*The fastest way to create sitemaps* <br>
-*for your Deno **[Fresh project]**.*
+*Quickly creating sitemaps for your **Deno [Fresh project]**.*
 
 <br>
 
