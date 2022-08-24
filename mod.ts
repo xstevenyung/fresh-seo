@@ -1,1 +1,1 @@
-export * from "./src/mod.ts";
+export * from "./sitemap.ts";
