@@ -59,7 +59,7 @@ export const handler : Handlers = {
             manifest
         );
 
-        // You can add additional page here
+        // You can remove unwanted routes here
         sitemap.add('/blog/hello-world');
         return sitemap.render();
     }

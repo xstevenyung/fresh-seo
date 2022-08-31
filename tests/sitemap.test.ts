@@ -197,8 +197,6 @@ Deno.test("Remove certain routes", () => {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
 
-  console.log(result);
-
   assertThrows(() => assertStringIncludes(result, "<loc>https://deno.land/gfm.css</loc>"));
 
   assertStringIncludes(result, "</urlset>");
