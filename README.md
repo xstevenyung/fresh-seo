@@ -66,6 +66,30 @@ export const handler : Handlers = {
 }
 ```
 
+*You can remove unwanted routes*
+
+```ts
+// ./routes/sitemap.xml.ts
+import { SitemapContext } from 'https://deno.land/x/fresh_seo/mod.ts';
+import { Handlers } from '$fresh/server.ts';
+import manifest from '../fresh.gen.ts';
+
+export const handler : Handlers = {
+    
+    GET(request,context){
+        
+        const sitemap = new SitemapContext(
+            'http://example.com'
+            manifest
+        );
+
+        // You can add additional page here
+        sitemap.remove('/gfm.css');
+        return sitemap.render();
+    }
+}
+```
+
 <br>
 <br>
 

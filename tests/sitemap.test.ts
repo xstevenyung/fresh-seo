@@ -1,5 +1,5 @@
 import { SitemapContext } from "../mod.ts";
-import { assert, assertStringIncludes } from "testing/asserts.ts";
+import { assert, assertStringIncludes, assertThrows } from "testing/asserts.ts";
 import { FakeTime } from "testing/time.ts";
 import { Manifest } from "fresh/server.ts";
 
@@ -155,7 +155,7 @@ Deno.test("Ignore sitemap.xml route", () => {
   assertStringIncludes(result, "</urlset>");
 });
 
-Deno.test("Ignore sitemap.xml route", () => {
+Deno.test("Add additional routes", () => {
   const manifest: Manifest = {
     routes: {
       "./routes/blog/[slug].tsx": { default: () => null },
@@ -174,6 +174,32 @@ Deno.test("Ignore sitemap.xml route", () => {
   );
 
   assertStringIncludes(result, "<loc>https://deno.land/blog/hello-world</loc>");
+
+  assertStringIncludes(result, "</urlset>");
+});
+
+Deno.test("Remove certain routes", () => {
+  const manifest: Manifest = {
+    routes: {
+      "./routes/blog/[slug].tsx": { default: () => null },
+      "./routes/gfm.css.tsx": { default: () => null },
+    },
+    islands: {},
+    baseUrl: url,
+  };
+  const sitemap = new SitemapContext(url, manifest);
+
+  const result = sitemap.remove("/gfm.css").generate();
+
+  assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(
+    result,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  );
+
+  console.log(result);
+
+  assertThrows(() => assertStringIncludes(result, "<loc>https://deno.land/gfm.css</loc>"));
 
   assertStringIncludes(result, "</urlset>");
 });
