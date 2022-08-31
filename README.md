@@ -66,7 +66,7 @@ export const handler : Handlers = {
 }
 ```
 
-*You can remove unwanted routes*
+*You can also remove unwanted routes*
 
 ```ts
 // ./routes/sitemap.xml.ts
