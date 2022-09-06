@@ -1,11 +1,11 @@
 {
   "imports": {
-    "dayjs": "https://esm.sh/dayjs@1.11.3",
-    "path": "https://deno.land/std@0.146.0/path/mod.ts",
+    "dayjs": "https://esm.sh/dayjs@1.11.5",
+    "path": "https://deno.land/std@0.153.0/path/mod.ts",
     "fs": "https://deno.land/std/fs/mod.ts",
     "testing/": "https://deno.land/std@0.145.0/testing/",
 
-    "fresh/": "https://deno.land/x/fresh@1.0.1/",
+    "fresh/": "https://deno.land/x/fresh@1.0.2/",
     "preact": "https://esm.sh/preact@10.8.1",
     "preact/": "https://esm.sh/preact@10.8.1/",
     "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.0?external=preact"
