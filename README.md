@@ -59,7 +59,7 @@ export const handler : Handlers = {
             manifest
         );
 
-        // You can remove unwanted routes here
+        // You can add additional page here
         sitemap.add('/blog/hello-world');
         return sitemap.render();
     }
@@ -83,7 +83,7 @@ export const handler : Handlers = {
             manifest
         );
 
-        // You can add additional page here
+        // You can remove unwanted routes here
         sitemap.remove('/gfm.css');
         return sitemap.render();
     }
