@@ -197,7 +197,59 @@ Deno.test("Remove certain routes", () => {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
 
-  assertThrows(() => assertStringIncludes(result, "<loc>https://deno.land/gfm.css</loc>"));
+  assert(!result.includes("<loc>https://deno.land/gfm.css</loc>"));
+
+  assertStringIncludes(result, "</urlset>");
+});
+
+
+Deno.test("Add leading slashes", () => {
+  const manifest: Manifest = {
+    routes: {
+      "./routes/dashboard.tsx": { default: () => null }
+    },
+    islands: {},
+    baseUrl: url,
+  };
+  const sitemap = new SitemapContext(url, manifest, {
+    leadingSlash: true
+  });
+
+  sitemap.add("/hello")
+
+  const result = sitemap.generate();
+
+  assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(
+    result,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  );
+
+  assertStringIncludes(result, "<loc>https://deno.land/dashboard/</loc>")
+  assertStringIncludes(result, "<loc>https://deno.land/hello/</loc>")
+
+  assertStringIncludes(result, "</urlset>");
+});
+
+Deno.test("Remove leading slashes", () => {
+  const manifest: Manifest = {
+    routes: {},
+    islands: {},
+    baseUrl: url,
+  };
+  const sitemap = new SitemapContext(url, manifest);
+
+  sitemap.add("/hello/")
+
+  const result = sitemap.generate();
+
+  assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
+  assertStringIncludes(
+    result,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  );
+
+  assert(!result.includes("<loc>https://deno.land/hello/</loc>"))
 
   assertStringIncludes(result, "</urlset>");
 });
