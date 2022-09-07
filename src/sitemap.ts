@@ -4,9 +4,9 @@
 /// <reference lib="deno.ns" />
 /// <reference lib="deno.unstable" />
 
-import day from "https://esm.sh/dayjs@1.11.5";
-import { basename, extname } from "https://deno.land/std@0.146.0/path/mod.ts";
-import { Manifest } from "https://deno.land/x/fresh@1.0.2/server.ts";
+import day from "dayjs";
+import { basename, extname } from "path";
+import { Manifest } from "fresh/server.ts";
 
 interface Options {
   leadingSlash?: boolean;
@@ -25,6 +25,7 @@ export class SitemapContext {
     this.#url = url;
     this.#manifest = manifest;
     this.#options = options || this.#options;
+
     this.#routes = Object.entries(this.#manifest.routes)
       .filter(([path]) => {
         // const isRootRoute = "./routes" === dirname(path);
