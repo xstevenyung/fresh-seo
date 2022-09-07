@@ -165,7 +165,7 @@ Deno.test("Add additional routes", () => {
   };
   const sitemap = new SitemapContext(url, manifest);
 
-  const result = sitemap.add("/blog/hello-world").generate();
+  const result = sitemap.add("/blog/hello-world").add("help").generate();
 
   assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
@@ -174,6 +174,7 @@ Deno.test("Add additional routes", () => {
   );
 
   assertStringIncludes(result, "<loc>https://deno.land/blog/hello-world</loc>");
+  assertStringIncludes(result, "<loc>https://deno.land/help</loc>");
 
   assertStringIncludes(result, "</urlset>");
 });

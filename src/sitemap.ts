@@ -46,7 +46,7 @@ export class SitemapContext {
   }
 
   add(route: string) {
-    this.#routes.push(route);
+    this.#routes.push(route.replace(/(^\/?)|(\/?$)/, '/'));
     return this;
   }
 
