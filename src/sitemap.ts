@@ -4,9 +4,8 @@
 /// <reference lib="deno.ns" />
 /// <reference lib="deno.unstable" />
 
-import day from "dayjs";
-import { basename, extname } from "path";
-import { Manifest } from "fresh/server.ts";
+import { basename, extname, day } from "./deps.ts";
+import { type Manifest } from "./types.ts";
 
 export class SitemapContext {
   #url: string;
