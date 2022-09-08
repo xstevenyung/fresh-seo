@@ -1,5 +1,4 @@
-import { join, resolve } from "https://deno.land/std@0.128.0/path/mod.ts";
-import { ensureFile } from "https://deno.land/std@0.128.0/fs/mod.ts";
+import { join, resolve, ensureFile } from "./src/deps.ts";
 
 const routesDirectory = resolve("./routes");
 

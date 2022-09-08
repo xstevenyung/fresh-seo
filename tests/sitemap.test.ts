@@ -1,7 +1,6 @@
 import { SitemapContext } from "../mod.ts";
-import { assert, assertStringIncludes, assertThrows } from "testing/asserts.ts";
-import { FakeTime } from "testing/time.ts";
-import { Manifest } from "fresh/server.ts";
+import { assert, assertStringIncludes, assertThrows, FakeTime } from "../src/deps.ts";
+import { Manifest } from "../src/types.ts";
 
 const url = "https://deno.land";
 Deno.env.set("APP_URL", url);
@@ -165,7 +164,7 @@ Deno.test("Add additional routes", () => {
   };
   const sitemap = new SitemapContext(url, manifest);
 
-  const result = sitemap.add("/blog/hello-world").generate();
+  const result = sitemap.add("/blog/hello-world").add("help").generate();
 
   assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
@@ -174,6 +173,7 @@ Deno.test("Add additional routes", () => {
   );
 
   assertStringIncludes(result, "<loc>https://deno.land/blog/hello-world</loc>");
+  assertStringIncludes(result, "<loc>https://deno.land/help</loc>");
 
   assertStringIncludes(result, "</urlset>");
 });
