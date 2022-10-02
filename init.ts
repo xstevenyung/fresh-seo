@@ -1,4 +1,4 @@
-import { join, resolve, ensureFile } from "./src/deps.ts";
+import { ensureFile, join, resolve } from "./src/deps.ts";
 
 const routesDirectory = resolve("./routes");
 

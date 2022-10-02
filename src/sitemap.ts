@@ -4,14 +4,14 @@
 /// <reference lib="deno.ns" />
 /// <reference lib="deno.unstable" />
 
-import { basename, extname, day } from "./deps.ts";
-import { type Manifest } from "./types.ts";
+import { basename, day, extname } from "./deps.ts";
+import { type Manifest, type Route, type RouteProps } from "./types.ts";
 
 export class SitemapContext {
   #url: string;
   #manifest: Manifest;
   #globalIgnore = ["sitemap.xml"];
-  #routes: Array<string> = [];
+  #routes: Array<Route> = [];
 
   constructor(url: string, manifest: Manifest) {
     this.#url = url;
@@ -24,7 +24,8 @@ export class SitemapContext {
         const isDynamic = !!fileName.match(/^\[.+\]$/)?.length;
 
         if (
-          isDynamic || fileName.startsWith("_") ||
+          isDynamic ||
+          fileName.startsWith("_") ||
           this.#globalIgnore.includes(fileName)
         ) {
           return false;
@@ -33,40 +34,73 @@ export class SitemapContext {
         return true;
       })
       .map(([path, route]) => {
-        return path
-          .replace(extname(path), "")
-          .replace("./routes", "")
-          .replace("index", ""); // We remove index as it's consider a "/" in Fresh
-      })
+        return {
+          pathName: path
+            .replace(extname(path), "")
+            .replace("./routes", "")
+            .replace("index", ""), // We remove index as it's consider a "/" in Fresh
+        };
+      });
   }
 
   get routes() {
     return this.#routes;
   }
 
-  add(route: string) {
-    this.#routes.push(route.replace(/(^\/?)|(\/?$)/, '/'));
+  add(route: string, props?: RouteProps) {
+    if (typeof props === "undefined") {
+      this.#routes.push({
+        pathName: route.replace(/(^\/?)|(\/?$)/, "/"),
+      });
+      return this;
+    }
+    const { changefreq, priority, lastmod } = props;
+    this.#routes.push({
+      pathName: route.replace(/(^\/?)|(\/?$)/, "/"),
+      changefreq,
+      priority,
+      lastmod,
+    });
+    return this;
+  }
+
+  set(route: string, props?: RouteProps) {
+    if (typeof props === "undefined") return this;
+    const i = this.#routes.findIndex(
+      (v) => v.pathName === route.replace(/(^\/?)|(\/?$)/, "/"),
+    );
+    if (i === -1) return this;
+    const { changefreq, priority, lastmod } = props;
+    const currentRoute = this.#routes[i];
+    this.#routes[i] = {
+      ...currentRoute,
+      changefreq: changefreq ?? currentRoute.changefreq,
+      priority: priority ?? currentRoute.priority,
+      lastmod: lastmod ?? currentRoute.lastmod,
+    };
     return this;
   }
 
   remove(route: string) {
-    this.#routes = this.#routes.filter(r => r !== route);
+    this.#routes = this.#routes.filter((r) => r.pathName !== route);
     return this;
   }
 
   generate() {
     return `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-      ${this.routes.map((route) => {
-      return `<url>
-          <loc>${this.#url}${route}</loc>
-          <lastmod>${day().format("YYYY-MM-DD")}</lastmod>
-          <changefreq>daily</changefreq>
-          <priority>0.8</priority>
+      ${
+      this.routes
+        .map((route) => {
+          return `<url>
+          <loc>${this.#url}${route.pathName}</loc>
+          <lastmod>${day(route.lastmod).format("YYYY-MM-DD")}</lastmod>
+          <changefreq>${route.changefreq ?? "daily"}</changefreq>
+          <priority>${route.priority ?? "0.8"}</priority>
         </url>`;
-    })
+        })
         .join("\n")
-      }
+    }
     </urlset>`;
   }
 
