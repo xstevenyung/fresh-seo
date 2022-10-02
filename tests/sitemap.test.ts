@@ -24,7 +24,7 @@ Deno.test("Empty sitemap", () => {
   assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
     result,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
   assertStringIncludes(result, "</urlset>");
 });
@@ -46,7 +46,7 @@ Deno.test("Map root index.ts", () => {
     assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
     assertStringIncludes(
       result,
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     );
 
     assertStringIncludes(result, `<loc>https://deno.land/</loc>`);
@@ -76,7 +76,7 @@ Deno.test("Map static route file", () => {
     assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
     assertStringIncludes(
       result,
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     );
 
     assertStringIncludes(result, `<loc>https://deno.land/dashboard</loc>`);
@@ -108,7 +108,7 @@ Deno.test("Ignore special routes file starting with _", () => {
   assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
     result,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
 
   assert(!result.includes(`<loc>https://deno.land/_404</loc>`));
@@ -151,7 +151,7 @@ Deno.test("Ignore sitemap.xml route", () => {
   assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
     result,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
 
   assert(!result.includes(`<loc>https://deno.land/sitemap.xml</loc>`));
@@ -179,7 +179,7 @@ Deno.test("Add additional routes", () => {
   assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
     result,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
 
   assertStringIncludes(result, "<loc>https://deno.land/blog/hello-world</loc>");
@@ -207,7 +207,7 @@ Deno.test("Remove certain routes", () => {
   assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
   assertStringIncludes(
     result,
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   );
 
   assertThrows(() =>
@@ -237,7 +237,7 @@ Deno.test("Set current route", async (t) => {
     assertStringIncludes(result, '<?xml version="1.0" encoding="UTF-8"?>');
     assertStringIncludes(
       result,
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     );
 
     assertStringIncludes(result, "<loc>https://deno.land/help</loc>");
