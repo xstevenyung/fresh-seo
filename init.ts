@@ -24,8 +24,11 @@ export const handler: Handlers = {
   return Deno.writeTextFile(destination, stub);
 }
 
-export async function createRobotTxt(url: string | null) {
-  const directory = resolve("./static");
+export async function createRobotTxt(
+  url: string | null,
+  staticPath: string | null,
+) {
+  const directory = resolve(staticPath ?? "./static");
 
   const destination = join(directory, "robots.txt");
 
@@ -44,5 +47,11 @@ const url = prompt(
   "Please input your site's url (skip by enter):",
   "http://example.com",
 );
+
+const staticPath = prompt(
+  "Please input your site's static folder path (skip by enter):",
+  "./static",
+);
+
 await createSitemap(url);
-await createRobotTxt(url);
+await createRobotTxt(url, staticPath);
