@@ -1,4 +1,3 @@
-export { default as day } from "https://esm.sh/dayjs@1.11.5";
 export {
   basename,
   extname,
