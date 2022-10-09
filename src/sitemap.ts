@@ -4,7 +4,7 @@
 /// <reference lib="deno.ns" />
 /// <reference lib="deno.unstable" />
 
-import { basename, day, extname } from "./deps.ts";
+import { basename, extname } from "./deps.ts";
 import { type Manifest, type Route, type RouteProps } from "./types.ts";
 
 export class SitemapContext {
@@ -94,7 +94,7 @@ export class SitemapContext {
         .map((route) => {
           return `<url>
           <loc>${this.#url}${route.pathName}</loc>
-          <lastmod>${day(route.lastmod).format("YYYY-MM-DD")}</lastmod>
+          <lastmod>${formatYearMonthDate(route.lastmod??new Date())}</lastmod>
           <changefreq>${route.changefreq ?? "daily"}</changefreq>
           <priority>${route.priority ?? "0.8"}</priority>
         </url>`;
@@ -124,4 +124,10 @@ export class SitemapContext {
   //     return null;
   //   }
   // }
+}
+
+function formatYearMonthDate(date: Date) {
+  return `${date.getFullYear()}-${("00" + (date.getMonth() + 1)).slice(-2)}-${
+    ("00" + date.getDate()).slice(-2)
+  }`;
 }
