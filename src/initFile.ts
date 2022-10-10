@@ -70,7 +70,7 @@ export async function init() {
     console.log(
       "Invalid url input! Setting to default value:'http://example.com'",
     );
-    url = "http://exmaple.com";
+    url = "http://example.com";
   }
 
   let staticPath = prompt(
@@ -80,7 +80,7 @@ export async function init() {
 
   if (!staticPath || !isValidDir(staticPath)) {
     console.log("Invalid folder input! Setting to default value:'./static'");
-    staticPath = ".static";
+    staticPath = "./static";
   }
 
   await createSitemap(url);
