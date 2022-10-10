@@ -9,21 +9,21 @@ function isUrl(input: string): boolean {
   return true;
 }
 
-function validateUrl(inputUrl: string | null): string {
-  if (!inputUrl || !isUrl(inputUrl.trim())) return "http://example.com";
-  return inputUrl;
+function isValidUrl(inputUrl: string): boolean {
+  if (!isUrl(inputUrl.trim())) return false;
+  return true;
 }
 
-function validateDir(inputDir: string | null): string {
-  if (!inputDir || inputDir.trim().length === 0) return "./static";
-  return inputDir;
+function isValidDir(inputDir: string): boolean {
+  if (inputDir.trim().length === 0) return false;
+  return true;
 }
 
 async function createSitemap(url: string) {
   const routesDirectory = resolve("./routes");
 
   const destination = join(routesDirectory, "sitemap.xml.ts");
-  
+
   await ensureFile(destination);
 
   const stub = `import { Handlers } from "$fresh/server.ts";
@@ -61,16 +61,29 @@ Sitemap: ${url}/sitemap.xml
 }
 
 export async function init() {
-  const url = prompt(
+  let url = prompt(
     "Please input your site's url (skip by enter):",
     "http://example.com",
   );
 
-  const staticPath = prompt(
+  if (!url || !isValidUrl(url)) {
+    console.log(
+      "Invalid url input! Setting to default value:'http://example.com'",
+    );
+    url = "http://exmaple.com";
+  }
+
+  let staticPath = prompt(
     "Please input your site's static folder path (skip by enter):",
     "./static",
   );
 
-  await createSitemap(validateUrl(url));
-  await createRobotTxt(validateUrl(url), validateDir(staticPath));
+  if (!staticPath || !isValidDir(staticPath)) {
+    console.log("Invalid folder input! Setting to default value:'./static'");
+    staticPath = ".static";
+  }
+
+  await createSitemap(url);
+
+  await createRobotTxt(url, staticPath);
 }
