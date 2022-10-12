@@ -10,10 +10,7 @@
 *Run the setup at the root of your project.*
 
 ```shell
-deno run            \
-    --allow-read    \
-    --allow-write   \
-    https://deno.land/x/fresh_seo/init.ts
+deno run --allow-read --allow-write https://deno.land/x/fresh_seo/init.ts
 
 ```
 
@@ -51,16 +48,15 @@ import { Handlers } from '$fresh/server.ts';
 import manifest from '../fresh.gen.ts';
 
 export const handler : Handlers = {
-    
     GET(request,context){
-        
         const sitemap = new SitemapContext(
-            'http://example.com'
+            'http://example.com', // put your domain here
             manifest
         );
 
-        // You can add additional page here
+        // you can add additional page here
         sitemap.add('/blog/hello-world');
+
         return sitemap.render();
     }
 }
@@ -75,16 +71,15 @@ import { Handlers } from '$fresh/server.ts';
 import manifest from '../fresh.gen.ts';
 
 export const handler : Handlers = {
-    
     GET(request,context){
-        
         const sitemap = new SitemapContext(
-            'http://example.com'
+            'http://example.com',
             manifest
         );
 
         // You can remove unwanted routes here
-        sitemap.remove('/gfm.css');
+        sitemap.remove('/admin');
+
         return sitemap.render();
     }
 }
