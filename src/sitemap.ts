@@ -94,7 +94,7 @@ export class SitemapContext {
         .map((route) => {
           return `<url>
           <loc>${this.#url}${route.pathName}</loc>
-          <lastmod>${formatYearMonthDate(route.lastmod??new Date())}</lastmod>
+          <lastmod>${formatYearMonthDate(route.lastmod ?? new Date())}</lastmod>
           <changefreq>${route.changefreq ?? "daily"}</changefreq>
           <priority>${route.priority ?? "0.8"}</priority>
         </url>`;
@@ -128,6 +128,8 @@ export class SitemapContext {
 
 function formatYearMonthDate(date: Date) {
   return `${date.getFullYear()}-${("00" + (date.getMonth() + 1)).slice(-2)}-${
-    ("00" + date.getDate()).slice(-2)
+    (
+      "00" + date.getDate()
+    ).slice(-2)
   }`;
 }

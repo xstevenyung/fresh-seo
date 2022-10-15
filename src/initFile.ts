@@ -1,4 +1,4 @@
-import { ensureFile, join, resolve } from "./deps.ts";
+import { ensureFile, extname, join, resolve } from "./deps.ts";
 
 function isUrl(input: string): boolean {
   try {
@@ -41,10 +41,7 @@ export const handler: Handlers = {
   return Deno.writeTextFile(destination, stub);
 }
 
-async function createRobotTxt(
-  url: string,
-  staticPath: string,
-) {
+async function createRobotTxt(url: string, staticPath: string) {
   const directory = resolve(staticPath);
 
   const destination = join(directory, "robots.txt");
@@ -58,6 +55,46 @@ Sitemap: ${url}/sitemap.xml
 `;
 
   return Deno.writeTextFile(destination, stub);
+}
+
+async function createSeoConfig() {
+  const routes: string[] = [];
+  for await (const dirEntry of Deno.readDir("./routes")) {
+    if (dirEntry.isFile) {
+      const fileName = dirEntry.name.replace(extname(dirEntry.name), "");
+      const isDynamic = !!fileName.match(/^\[.+\]$/)?.length;
+      if (
+        isDynamic ||
+        fileName.startsWith("_") ||
+        fileName.startsWith("sitemap")
+      ) {
+        continue;
+      }
+      routes.push(fileName);
+    }
+  }
+  const routesText = routes.map((route) => {
+    if (route === "index") {
+      return `"/": {
+      title: "index",
+      description: "${route} page",
+    }`;
+    }
+    return `
+    "/${route}": {
+      title: "${route}",
+      description: "${route} page",
+    }`;
+  });
+  const stub =
+    `import { Config } from "https://deno.land/x/fresh_seo@0.2.1/mod.ts";
+export default {
+  routes: {
+    ${routesText.join(",")}
+  },
+} as Config;
+  `;
+  return Deno.writeTextFile("./fresh-seo.config.ts", stub);
 }
 
 export async function init() {
@@ -86,4 +123,5 @@ export async function init() {
   await createSitemap(url);
 
   await createRobotTxt(url, staticPath);
+  await createSeoConfig();
 }
