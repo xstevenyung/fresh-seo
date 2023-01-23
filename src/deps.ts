@@ -1,4 +1,4 @@
-export { default as day } from "https://esm.sh/dayjs@1.11.5";
+export { default as day } from "https://esm.sh/dayjs@1.11.5?pin=v102";
 export {
   basename,
   extname,
