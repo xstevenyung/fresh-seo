@@ -1,5 +1,5 @@
-import { Manifest, Plugin } from "$fresh/server.ts";
 import { SitemapContext } from "./sitemap.ts";
+import { Manifest, Plugin } from "./types.ts";
 
 interface PluginOptions {
 	include: string[];

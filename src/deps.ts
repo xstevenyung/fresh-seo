@@ -11,3 +11,4 @@ export {
 } from "https://deno.land/std@0.145.0/testing/asserts.ts";
 export { FakeTime } from "https://deno.land/std@0.145.0/testing/time.ts";
 export { ensureFile } from "https://deno.land/std@0.128.0/fs/mod.ts";
+export { filterFiles } from "https://deno.land/x/glob_filter@1.0.0/mod.ts";
