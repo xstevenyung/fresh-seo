@@ -7,20 +7,22 @@
 
 ## Getting Started
 
-*Run the setup at the root of your project.*
+*Import the plugin `freshSEOPlugin` in your Fresh app*
 
-```shell
-deno run --allow-read --allow-write https://deno.land/x/fresh_seo/init.ts
+```ts
+import { start } from "$fresh/server.ts";
+import manifest from "./fresh.gen.ts";
+
+import { freshSEOPlugin } from "https://deno.land/x/fresh_seo/mod.ts";
+
+await start(manifest, {
+  plugins: [
+    // This line configures Fresh to use the first-party twind plugin.
+    freshSEOPlugin(manifest)
+  ],
+});
 
 ```
-
-<br>
-
-The following file should have been created:
-
-`routes/sitemap.xml.ts`
-
-<br>
 
 A basic sitemap should now be available at:
     

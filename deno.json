@@ -1,5 +1,8 @@
 {
   "tasks": {
     "test": "deno test --allow-env --allow-write --allow-read"
+  },
+  "imports": {
+	"$fresh/": "https://deno.land/x/fresh@1.3.1/"
   }
 }
