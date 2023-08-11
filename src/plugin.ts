@@ -6,7 +6,7 @@ interface PluginOptions {
 	exclude: string[];
 }
 
-export const freshSEOPlugin = (manifest: Manifest, opts: PluginOptions): Plugin => {
+export const freshSEOPlugin = (manifest: Manifest, opts: PluginOptions = {}): Plugin => {
 	return {
 		name: "fresh-seo",
 		routes: [
