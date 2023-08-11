@@ -2,8 +2,8 @@ import { SitemapContext } from "./sitemap.ts";
 import { Manifest, Plugin } from "./types.ts";
 
 interface PluginOptions {
-	include: string[];
-	exclude: string[];
+	include?: string[];
+	exclude?: string[];
 }
 
 export const freshSEOPlugin = (manifest: Manifest, opts: PluginOptions = {}): Plugin => {
