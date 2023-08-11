@@ -1,9 +1,9 @@
 import { SitemapContext } from "./sitemap.ts";
-import { Manifest, Plugin } from "./types.ts";
+import { Manifest, Plugin, RouteProps } from "./types.ts";
 
 interface PluginOptions {
-	include?: string[];
-	exclude?: string[];
+	include?: Array<string | { path: string, options: RouteProps }>
+	exclude?: Array<string>
 }
 
 export const freshSEOPlugin = (manifest: Manifest, opts: PluginOptions = {}): Plugin => {
@@ -16,8 +16,13 @@ export const freshSEOPlugin = (manifest: Manifest, opts: PluginOptions = {}): Pl
 					const sitemap = new SitemapContext(req.url, manifest);
 
 					if (opts.include) {
-						opts.include.forEach((path) => {
-							sitemap.add(path);
+						opts.include.forEach((route) => {
+							if (typeof route === "string") {
+								sitemap.add(route);
+								return;
+							}
+
+							sitemap.add(route.path, route.options);
 						})
 					}
 
