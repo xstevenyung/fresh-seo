@@ -1,4 +1,3 @@
-
 # Fresh SEO 🍋   [![Badge License]][License]
 
 *Quickly creating sitemaps for your **Deno [Fresh project]**.*
@@ -7,26 +6,27 @@
 
 ## Getting Started
 
-*Run the setup at the root of your project.*
+*Import the plugin `freshSEOPlugin` in your Fresh app*
 
-```shell
-deno run --allow-read --allow-write https://deno.land/x/fresh_seo/init.ts
+```ts
+// ./main.ts
+import { start } from "$fresh/server.ts";
+import manifest from "./fresh.gen.ts";
+
+import { freshSEOPlugin } from "https://deno.land/x/fresh_seo/mod.ts";
+
+await start(manifest, {
+  plugins: [
+    freshSEOPlugin(manifest)
+  ],
+});
 
 ```
-
-<br>
-
-The following file should have been created:
-
-`routes/sitemap.xml.ts`
-
-<br>
 
 A basic sitemap should now be available at:
     
 [`http://localhost:8000/sitemap.xml`][Localhost]
     
-<br>
 <br>
 
 ## How does it work?
@@ -42,50 +42,42 @@ A basic sitemap should now be available at:
 *You will still have to map dynamic routes yourself!*
 
 ```ts
-// ./routes/sitemap.xml.ts
-import { SitemapContext } from 'https://deno.land/x/fresh_seo/mod.ts';
-import { Handlers } from '$fresh/server.ts';
-import manifest from '../fresh.gen.ts';
+// ./main.ts
+import { start } from "$fresh/server.ts";
+import manifest from "./fresh.gen.ts";
 
-export const handler : Handlers = {
-    GET(request,context){
-        const sitemap = new SitemapContext(
-            'http://example.com', // put your domain here
-            manifest
-        );
+import { freshSEOPlugin } from "https://deno.land/x/fresh_seo/mod.ts";
 
-        // you can add additional page here
-        sitemap.add('/blog/hello-world');
-
-        return sitemap.render();
-    }
-}
+await start(manifest, {
+  plugins: [
+    freshSEOPlugin(manifest, {
+        include: ["/blog/intro"]
+    })
+  ],
+});
 ```
 
 *You can also remove unwanted routes*
 
 ```ts
-// ./routes/sitemap.xml.ts
-import { SitemapContext } from 'https://deno.land/x/fresh_seo/mod.ts';
-import { Handlers } from '$fresh/server.ts';
-import manifest from '../fresh.gen.ts';
+// ./main.ts
+import { start } from "$fresh/server.ts";
+import manifest from "./fresh.gen.ts";
 
-export const handler : Handlers = {
-    GET(request,context){
-        const sitemap = new SitemapContext(
-            'http://example.com',
-            manifest
-        );
+import { freshSEOPlugin } from "https://deno.land/x/fresh_seo/mod.ts";
 
-        // You can remove unwanted routes here
-        sitemap.remove('/admin');
-
-        return sitemap.render();
-    }
-}
+await start(manifest, {
+  plugins: [
+    freshSEOPlugin(manifest, {
+        exclude: [
+            "/blog/intro",
+            "/api/*"
+        ]
+    })
+  ],
+});
 ```
 
-<br>
 <br>
 
 ## Testing

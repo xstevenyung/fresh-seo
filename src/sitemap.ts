@@ -4,6 +4,7 @@
 /// <reference lib="deno.ns" />
 /// <reference lib="deno.unstable" />
 
+import { filterFiles } from "https://deno.land/x/glob_filter@1.0.0/mod.ts";
 import { basename, extname } from "./deps.ts";
 import { type Manifest, type Route, type RouteProps } from "./types.ts";
 
@@ -54,22 +55,28 @@ export class SitemapContext {
       });
       return this;
     }
+
     const { changefreq, priority, lastmod } = props;
+
     this.#routes.push({
       pathName: route.replace(/(^\/?)|(\/?$)/, "/"),
       changefreq,
       priority,
       lastmod,
     });
+
     return this;
   }
 
   set(route: string, props?: RouteProps) {
     if (typeof props === "undefined") return this;
+
     const i = this.#routes.findIndex(
       (v) => v.pathName === route.replace(/(^\/?)|(\/?$)/, "/"),
     );
+
     if (i === -1) return this;
+
     const { changefreq, priority, lastmod } = props;
     const currentRoute = this.#routes[i];
     this.#routes[i] = {
@@ -82,7 +89,11 @@ export class SitemapContext {
   }
 
   remove(route: string) {
-    this.#routes = this.#routes.filter((r) => r.pathName !== route);
+	// glob_filter works best with absolute paths
+	// so we need to add the url to the route
+	const matching = filterFiles(this.#routes.map((r) => this.#url + r.pathName), { match: this.#url + route, ignore: this.#globalIgnore })
+	this.#routes = this.#routes.filter((r) => !matching.map((m) => m.replace(this.#url, "")).includes(r.pathName))
+
     return this;
   }
 
