@@ -13,7 +13,7 @@ export const freshSEOPlugin = (manifest: Manifest, opts: PluginOptions = {}): Pl
 			{
 				path: "/sitemap.xml",
 				handler: (req) => {
-					const sitemap = new SitemapContext(req.url, manifest);
+					const sitemap = new SitemapContext(req.url.replace("/sitemap.xml", ""), manifest);
 
 					if (opts.include) {
 						opts.include.forEach((route) => {
