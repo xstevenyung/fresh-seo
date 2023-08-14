@@ -56,3 +56,19 @@ async function spawnServer(options: Deno.CommandOptions, expectErrors = false) {
 
   return { serverProcess, lines, address };
 }
+
+/**
+ * Format date to YYYY-MM-DD
+ * @param date
+ * @returns formatted date
+ */
+export function formatYearMonthDate(date: Date) {
+  return `${date.getFullYear()}-${("00" + (date.getMonth() + 1)).slice(-2)}-${(
+    "00" + date.getDate()
+  ).slice(-2)}`;
+}
+
+export async function fetchSitemapAsText(address: string) {
+  const resp = await fetch(address);
+  return resp.text();
+}

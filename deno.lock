@@ -1,6 +1,7 @@
 {
   "version": "2",
   "remote": {
+    "https://deno.land/std@0.193.0/streams/text_line_stream.ts": "0f2c4b33a5fdb2476f2e060974cba1347cefe99a4af33c28a57524b1a34750fa",
     "https://deno.land/std@0.197.0/_util/diff.ts": "1a3c044aedf77647d6cac86b798c6417603361b66b54c53331b312caeb447aea",
     "https://deno.land/std@0.197.0/_util/os.ts": "d932f56d41e4f6a6093d56044e29ce637f8dcc43c5a90af43504a889cf1775e3",
     "https://deno.land/std@0.197.0/assert/_constants.ts": "8a9da298c26750b28b326b297316cdde860bc237533b07e1337c021379e6b2a9",
